@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <pthread.h>
 int count = 0;
-int length = 1000000000; //for testing purposes
+int length = 1000000;
 long *ar;
-int threadNumber = 32; //for testing purposes
+int threadNumber = 32;
 int actualCount()
 {
     int i = 0;
@@ -56,12 +56,13 @@ int main()
         {
             pthread_join(thread[i], NULL);
         }
-        if (count == trueCount)
+        int p = count;
+        if (p == trueCount)
         {
             r++;
         }
     }
-    printf("%d %d %d", count, trueCount, r);
+    printf("%d", r);
     end = clock();
     timeTaken = ((double)(end - start)) / CLOCKS_PER_SEC;
     printf("\n%f secs", timeTaken);
