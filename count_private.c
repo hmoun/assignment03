@@ -52,6 +52,7 @@ int main()
     start = clock();
     for (int i = 0; i < 100; i++)
     {
+        int finalCount=0;
         pthread_t thread[threadNumber];
         for (int i = 0; i < threadNumber; i++)
         {
