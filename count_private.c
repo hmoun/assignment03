@@ -66,8 +66,7 @@ int main()
         {
             finalCount += counts[j];
         }
-        int p = finalCount;
-        if (p == trueCount)
+        if (finalCount == trueCount)
         {
             r++;
         }
