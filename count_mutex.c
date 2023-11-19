@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <pthread.h>
 int count = 0;
-long length = 1000000000;
+long length = 1000000;
 long *ar;
 int threadNumber = 4;
 pthread_mutex_t mutex;
@@ -60,7 +60,8 @@ int main()
         {
             pthread_join(thread[i], NULL);
         }
-        if (count == trueCount)
+        int p = count;
+        if (p == trueCount)
         {
             r++;
         }
