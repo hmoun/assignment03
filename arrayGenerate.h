@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
-long *generate(int size)
+long *generate(long size)
 {
     srand(time(0));
     long *generated = (long *)malloc(sizeof(long) * size);
