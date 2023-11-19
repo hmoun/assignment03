@@ -1,19 +1,16 @@
 #include "arrayGenerate.h"
 #include <stdio.h>
 #include <pthread.h>
-int count;
 long *counts;
-int finalCount;
-int length = 10;
-long *ar;
+long length = 10000;
+long *generated;
 int threadNumber = 32;
+int trueCount = 0;
 int actualCount()
 {
-    int i = 0;
-    int trueCount = 0;
-    for (i = 0; i < length; i++)
+    for (int i = 0; i < length; i++)
     {
-        if (ar[i] == 1)
+        if (generated[i] == 1)
         {
             trueCount++;
         }
@@ -22,18 +19,18 @@ int actualCount()
 }
 void *raceCount(void *ID)
 {
-    count = 0;
     long id = (long)ID;
     long iterations = length / threadNumber;
     long start = id * iterations;
     long end = start + iterations;
+    int count = 0;
     if (length - end < iterations)
     {
         end = length;
     }
     for (start; start < end; start++)
     {
-        if (ar[start] == 1)
+        if (generated[start] == 1)
         {
             count++;
         }
@@ -42,17 +39,16 @@ void *raceCount(void *ID)
 }
 int main()
 {
-    count = 0;
     counts = (long *)malloc(sizeof(long) * threadNumber);
-    ar = generate(length);
+    generated = generate(length);
+    int trueCount = actualCount();
     clock_t start, end;
     double timeTaken;
     int r = 0;
-    int trueCount = actualCount();
     start = clock();
     for (int i = 0; i < 100; i++)
     {
-        int finalCount=0;
+        int finalCount = 0;
         pthread_t thread[threadNumber];
         for (int i = 0; i < threadNumber; i++)
         {
@@ -75,7 +71,7 @@ int main()
     end = clock();
     timeTaken = ((double)(end - start)) / CLOCKS_PER_SEC;
     printf("\n%f secs", timeTaken);
-    free(ar);
+    free(generated);
     free(counts);
     return 0;
 }
