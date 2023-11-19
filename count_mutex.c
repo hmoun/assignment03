@@ -60,8 +60,7 @@ int main()
         {
             pthread_join(thread[i], NULL);
         }
-        int p = count;
-        if (p == trueCount)
+        if (count == trueCount)
         {
             r++;
         }
