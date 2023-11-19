@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <pthread.h>
 int count = 0;
-int length = 1000000000;
+int length = 1000000000; //for testing purposes
 long *ar;
-int threadNumber = 32;
+int threadNumber = 32; //for testing purposes
 int actualCount()
 {
     int i = 0;
