@@ -1,12 +1,13 @@
 #include "arrayGenerate.h"
 #include <stdio.h>
 #include <pthread.h>
-int count = 0;
-int length = 100;
-long *ar;
-int threadNumber = 32;
+int count;
+int length = 1000;
+long *generated;
+int threadNumber = 10;
 long *counts;
 int finalCount;
+int trueCount = 0;
 typedef struct cacheOccupation cache;
 struct cacheOccupation
 {
@@ -16,10 +17,9 @@ struct cacheOccupation
 int actualCount()
 {
     int i = 0;
-    int trueCount = 0;
     for (i = 0; i < length; i++)
     {
-        if (ar[i] == 1)
+        if (generated[i] == 1)
         {
             trueCount++;
         }
@@ -28,12 +28,12 @@ int actualCount()
 }
 void *raceCount(void *ID)
 {
-    cache *ptr = (cache *)ID;
     count = 0;
+    cache *ptr = (cache *)ID;
     long iterations = length / threadNumber;
     long start = (ptr->number) * iterations;
     long end = start + iterations;
-    int toFill = 32768 - ((iterations * 8) + (3 * sizeof(long)) + sizeof(int));
+    int toFill = 131072 - ((iterations * 8) + (sizeof(long) * 3) + sizeof(int));
     ptr->dummy = (char *)malloc(toFill * sizeof(char));
     if (length - end < iterations)
     {
@@ -41,7 +41,7 @@ void *raceCount(void *ID)
     }
     for (start; start < end; start++)
     {
-        if (ar[start] == 1)
+        if (generated[start] == 1)
         {
             count++;
         }
@@ -50,13 +50,12 @@ void *raceCount(void *ID)
 }
 int main()
 {
-    count = 0;
     counts = (long *)malloc(sizeof(long) * threadNumber);
-    ar = generate(length);
+    generated = generate(length);
+    int trueCount = actualCount();
     clock_t start, end;
     double timeTaken;
     int r = 0;
-    int trueCount = actualCount();
     start = clock();
     for (int i = 0; i < 100; i++)
     {
@@ -85,7 +84,7 @@ int main()
     end = clock();
     timeTaken = ((double)(end - start)) / CLOCKS_PER_SEC;
     printf("\n%f secs", timeTaken);
-    free(ar);
+    free(generated);
     free(counts);
     return 0;
 }
