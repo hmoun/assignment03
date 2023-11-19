@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <pthread.h>
 int count = 0;
-int length = 10; //for testing purposes
+int length = 100;
 long *ar;
-int threadNumber = 32; //for testing purposes
+int threadNumber = 32;
 long *counts;
 int finalCount;
 typedef struct cacheOccupation cache;
@@ -47,7 +47,6 @@ void *raceCount(void *ID)
         }
     }
     counts[ptr->number] = count;
-    // free(ptr->dummy);
 }
 int main()
 {
@@ -56,11 +55,12 @@ int main()
     ar = generate(length);
     clock_t start, end;
     double timeTaken;
-    int r;
+    int r = 0;
     int trueCount = actualCount();
     start = clock();
     for (int i = 0; i < 100; i++)
     {
+        int finalCount = 0;
         pthread_t thread[threadNumber];
         for (int i = 0; i < threadNumber; i++)
         {
@@ -76,8 +76,7 @@ int main()
         {
             finalCount += counts[j];
         }
-        int p = count;
-        if (p == trueCount)
+        if (finalCount == trueCount)
         {
             r++;
         }
